@@ -22,6 +22,14 @@ const (
 	onlyNewTreeNodesID TreeNodeID = "_ONLYNEWNODES"
 )
 
+// TreeNodeIconAlign represents the alignment of the icon in a tree node.
+type TreeNodeIconAlign = string
+
+const (
+	TreeNodeIconAlignLeft  TreeNodeIconAlign = "left"
+	TreeNodeIconAlignRight TreeNodeIconAlign = "right"
+)
+
 // Declare conformity with interfaces
 var _ fyne.Focusable = (*Tree)(nil)
 var _ fyne.Widget = (*Tree)(nil)
@@ -38,6 +46,9 @@ type Tree struct {
 	//
 	// Since: 2.5
 	HideSeparators bool
+
+	// IconAlign represents the alignment of the icon in a tree node.
+	IconAlign TreeNodeIconAlign
 
 	ChildUIDs      func(uid TreeNodeID) (c []TreeNodeID)                     `json:"-"` // Return a sorted slice of Children TreeNodeIDs for the given Node TreeNodeID
 	CreateNode     func(branch bool) (o fyne.CanvasObject)                   `json:"-"` // Return a CanvasObject that can represent a Branch (if branch is true), or a Leaf (if branch is false)
@@ -931,15 +942,28 @@ func (r *treeNodeRenderer) Layout(size fyne.Size) {
 	x := pad + r.treeNode.Indent()
 	y := float32(0)
 	r.background.Resize(size)
+
+	if r.treeNode.tree.IconAlign == TreeNodeIconAlignLeft {
+		if r.treeNode.icon != nil {
+			r.treeNode.icon.Move(fyne.NewPos(x, y))
+			r.treeNode.icon.Resize(fyne.NewSize(iconSize, size.Height))
+		}
+		x += iconSize + pad
+		if r.treeNode.content != nil {
+			r.treeNode.content.Move(fyne.NewPos(x, y))
+			r.treeNode.content.Resize(fyne.NewSize(size.Width-x, size.Height))
+		}
+		return
+	}
+
+	if r.treeNode.content != nil {
+		r.treeNode.content.Move(fyne.NewPos(x, y))
+		r.treeNode.content.Resize(fyne.NewSize(size.Width-x-iconSize-pad, size.Height))
+	}
+	x = size.Width - iconSize - pad
 	if r.treeNode.icon != nil {
 		r.treeNode.icon.Move(fyne.NewPos(x, y))
 		r.treeNode.icon.Resize(fyne.NewSize(iconSize, size.Height))
-	}
-	x += iconSize
-	x += pad
-	if r.treeNode.content != nil {
-		r.treeNode.content.Move(fyne.NewPos(x, y))
-		r.treeNode.content.Resize(fyne.NewSize(size.Width-x, size.Height))
 	}
 }
 
