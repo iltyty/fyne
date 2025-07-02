@@ -57,6 +57,7 @@ type Tree struct {
 	OnBranchOpened func(uid TreeNodeID)                                      `json:"-"` // Called when a Branch is opened
 	OnSelected     func(uid TreeNodeID)                                      `json:"-"` // Called when the Node with the given TreeNodeID is selected.
 	OnUnselected   func(uid TreeNodeID)                                      `json:"-"` // Called when the Node with the given TreeNodeID is unselected.
+	OnDoubleClick  func(uid TreeNodeID)                                      `json:"-"` // Called when the Node with the given TreeNodeID is double clicked.
 	UpdateNode     func(uid TreeNodeID, branch bool, node fyne.CanvasObject) `json:"-"` // Called to update the given CanvasObject to represent the data at the given TreeNodeID
 
 	branchMinSize fyne.Size
@@ -847,6 +848,7 @@ func (r *treeContentRenderer) getLeaf() (l *leaf) {
 var _ desktop.Hoverable = (*treeNode)(nil)
 var _ fyne.CanvasObject = (*treeNode)(nil)
 var _ fyne.Tappable = (*treeNode)(nil)
+var _ fyne.DoubleTappable = (*treeNode)(nil)
 
 type treeNode struct {
 	BaseWidget
@@ -912,6 +914,12 @@ func (n *treeNode) Tapped(*fyne.PointEvent) {
 		}
 	}
 	n.Refresh()
+}
+
+func (n *treeNode) DoubleTapped(*fyne.PointEvent) {
+	if n.tree.OnDoubleClick != nil {
+		n.tree.OnDoubleClick(n.uid)
+	}
 }
 
 func (n *treeNode) partialRefresh() {
