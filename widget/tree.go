@@ -1043,9 +1043,9 @@ func newBranchIcon(tree *Tree) (i *branchIcon) {
 
 func (i *branchIcon) Refresh() {
 	if i.tree.IsBranchOpen(i.uid) {
-		i.Resource = theme.MoveDownIcon()
+		i.Resource = theme.CheveronDownIcon()
 	} else {
-		i.Resource = theme.NavigateNextIcon()
+		i.Resource = theme.CheveronRightIcon()
 	}
 	i.Icon.Refresh()
 }

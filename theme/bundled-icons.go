@@ -6,6 +6,20 @@ import (
 	"fyne.io/fyne/v2"
 )
 
+//go:embed icons/chevron-down.svg
+var chevronDownIcon []byte
+var chevronDownIconRes = &fyne.StaticResource{
+	StaticName:    "chevron-down.svg",
+	StaticContent: chevronDownIcon,
+}
+
+//go:embed icons/chevron-right.svg
+var chevronRightIcon []byte
+var chevronRightIconRes = &fyne.StaticResource{
+	StaticName:    "chevron-right.svg",
+	StaticContent: chevronRightIcon,
+}
+
 //go:embed icons/fyne.png
 var fyneLogo []byte
 var fynelogo = &fyne.StaticResource{

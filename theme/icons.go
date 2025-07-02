@@ -8,6 +8,12 @@ import (
 )
 
 const (
+	// IconNameChevronDown is the name of theme lookup for chevron down icon.
+	IconNameChevronDown fyne.ThemeIconName = "chevron-down"
+
+	// IconNameChevronRight is the name of theme lookup for chevron right icon.
+	IconNameChevronRight fyne.ThemeIconName = "chevron-right"
+
 	// IconNameCancel is the name of theme lookup for cancel icon.
 	//
 	// Since: 2.0
@@ -506,6 +512,9 @@ const (
 
 var (
 	icons = map[fyne.ThemeIconName]fyne.Resource{
+		IconNameChevronDown:  NewThemedResource(chevronDownIconRes),
+		IconNameChevronRight: NewThemedResource(chevronRightIconRes),
+
 		IconNameCancel:        NewThemedResource(cancelIconRes),
 		IconNameConfirm:       NewThemedResource(checkIconRes),
 		IconNameDelete:        NewThemedResource(deleteIconRes),
@@ -857,6 +866,16 @@ func NewDisabledResource(res fyne.Resource) *DisabledResource {
 	return &DisabledResource{
 		source: res,
 	}
+}
+
+// CheveronDownIcon returns a resource containing the cheveron down icon.
+func CheveronDownIcon() fyne.Resource {
+	return safeIconLookup(IconNameChevronDown)
+}
+
+// CheveronRightIcon returns a resource containing the cheveron right icon.
+func CheveronRightIcon() fyne.Resource {
+	return safeIconLookup(IconNameChevronRight)
 }
 
 // FyneLogo returns a resource containing the Fyne logo.
